@@ -26,9 +26,11 @@ def check_admin_password(password: str) -> bool:
         True si la contraseña es correcta
     """
     try:
-        admin_password = st.secrets.get("ADMIN_PASSWORD", "admin2026")
-    except Exception:
-        admin_password = "admin2026"  # Fallback para desarrollo
+        admin_password = st.secrets["ADMIN_PASSWORD"]
+    except (KeyError, FileNotFoundError):
+        st.error("⚠️ ERROR: No se ha configurado ADMIN_PASSWORD en los secretos.")
+        st.info("Configura los secretos en Streamlit Cloud: Settings → Secrets → añade ADMIN_PASSWORD")
+        return False
     
     return password == admin_password
 
